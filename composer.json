@@ -1,0 +1,25 @@
+{
+	"keywords" : [
+		"pathinfo", "path", "filesystem", "relative path", "absolute path"
+	],
+	"autoload" : {
+		"psr-4" : {
+			"TS\\Filesystem\\" : "src"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"TS\\Filesystem\\" : "tests/"
+		}
+	},
+	"name" : "timostamm/pathinfo",
+	"type" : "library",
+	"description" : "An object to manipulate filesystem paths with a fluid interface",
+	"license" : "AGPL-3.0",
+	"require" : {
+		"php" : ">=5.6"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "~6.3"
+	}
+}
