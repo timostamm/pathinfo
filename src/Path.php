@@ -229,7 +229,7 @@ class Path
 	 */
 	public function isEmpty()
 	{
-		return $this->partCount === 0;
+		return $this->partCount === 0 || ( $this->partCount === 1 && $this->parts[0] === '');
 	}
 
 	/**
