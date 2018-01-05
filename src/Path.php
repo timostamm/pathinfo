@@ -229,7 +229,16 @@ class Path
 	 */
 	public function isEmpty()
 	{
-		return $this->partCount === 0 || ( $this->partCount === 1 && $this->parts[0] === '');
+		if ($this->partCount === 0) {
+			return true;
+		}
+		if ($this->partCount === 1) {
+			return $this->firstPart === '';
+		}
+		if ($this->partCount === 3 && $this->isStreamWrapped()) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -239,9 +248,28 @@ class Path
 	 */
 	public function isAbsolute()
 	{
-		return $this->firstPart === '';
+		if ($this->firstPart === '') {
+			return true;
+		}
+		return $this->isStreamWrapped();
 	}
-
+	
+	/**
+	 * Is this a stream-wrapped path?
+	 * 
+	 * @see http://php.net/manual/de/class.streamwrapper.php
+	 * @return boolean
+	 */
+	public function isStreamWrapped()
+	{
+		$maybeStreamWrapped = $this->partCount > 1 && $this->firstPart !== '' && $this->parts[1] === '' && ':' === substr($this->firstPart, -1);
+		if (! $maybeStreamWrapped) {
+			return false;
+		}
+		$name = substr($this->firstPart, 0, -1);
+		return in_array($name, stream_get_wrappers());
+	}
+	
 	/**
 	 * Returns true if both parts are equal after normalization.
 	 *

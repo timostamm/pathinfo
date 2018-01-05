@@ -146,7 +146,9 @@ class PathTest extends TestCase
 			'a/./x/..' => false,
 			'/.' => true,
 			'/./' => true,
-			'' => false
+			'' => false, 
+			'php://' => true,
+			'php:///' => true
 		];
 		foreach ($tests as $test => $expected) {
 			$this->assertEquals($expected, Path::info($test)->isAbsolute(), $test);
@@ -158,7 +160,8 @@ class PathTest extends TestCase
 		$tests = [
 			'/' => false,
 			'.' => false,
-			'' => true
+			'' => true, 
+			'php://' => true
 		];
 		foreach ($tests as $test => $expected) {
 			$this->assertEquals($expected, Path::info($test)->isEmpty(), $test);
