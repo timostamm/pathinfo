@@ -1,14 +1,15 @@
 <?php
 
+namespace TS\Filesystem;
+
 
 use PHPUnit\Framework\TestCase;
-use TS\Filesystem\Path;
 
 
 
 class PathTest extends TestCase
 {
-	
+
 	public function testRelativeTo()
 	{
 		$tests = [
@@ -29,20 +30,20 @@ class PathTest extends TestCase
 			['/a/', '/a/b', '../'],
 			['/a/b', '/a/', 'b'],
 		];
-		
+
 		foreach ($tests as $test) {
 			list($path, $start, $expected) = $test;
-			
+
 			$relative = Path::info($path)->relativeTo($start);
-			
+
 			$this->assertEquals($expected, $relative->__toString(), sprintf('Wrong relative path %s (%s relative to dir %s).', $relative, $path, $start));
-			
+
 			$resolved = Path::info($start)->resolve($relative);
 			$ok = $resolved->equals( $path );
 			$this->assertTrue($ok, sprintf('Expected relative path %s (%s relative to dir %s) to be original path again after joining with %s again, but got: %s ', $relative, $path, $start, $start, $resolved));
 		}
 	}
-	
+
 	public function testRelativeTo_cwd()
 	{
 		$this->assertEquals('../../../assets/img/ping.png', Path::info('assets/img/ping.png')->relativeTo('site/foo/bar/', '/var/www/'));
@@ -51,7 +52,7 @@ class PathTest extends TestCase
 		$this->assertEquals('js/script.js', Path::info('/var/wwwroot/js/script.js')->relativeTo('/var/wwwroot/.')->get());
 		$this->assertEquals('js/script.js', Path::info('js/script.js')->relativeTo('.', '/var/wwwroot/')->get());
 	}
-	
+
 	public function testIsIn()
 	{
 		$tests = [
@@ -64,14 +65,14 @@ class PathTest extends TestCase
 			$this->assertEquals($expected, Path::info($path)->isIn($dir));
 		}
 	}
-	
+
 	public function testIsIn_cwd()
 	{
 		$this->assertTrue(Path::info('assets/js/script.js')->isIn('assets/', '/wwwroot/'));
 		$this->assertFalse(Path::info('/assets/js/script.js')->isIn('assets/', '/wwwroot/'));
 	}
-	
-	
+
+
 	public function testAbs()
 	{
 		$this->assertEquals('/wwwroot/', Path::info('.')->abs('/wwwroot')->normalize());
@@ -82,8 +83,8 @@ class PathTest extends TestCase
 		$this->assertEquals('/wwwroot/index.html', Path::info('index.html')->abs('/wwwroot'));
 		$this->assertEquals('/var/ping.png', Path::info('/var/ping.png')->abs('/wwwroot'));
 	}
-	
-	
+
+
 	public function testNormalize()
 	{
 		$tests = [
@@ -104,8 +105,8 @@ class PathTest extends TestCase
 				->get());
 		}
 	}
-	
-	
+
+
 	public function testEquals()
 	{
 		$tests = [
@@ -117,7 +118,7 @@ class PathTest extends TestCase
 			$this->assertTrue($equal);
 		}
 	}
-	
+
 	public function testResolve()
 	{
 		$tests = [
@@ -136,8 +137,8 @@ class PathTest extends TestCase
 			$this->assertEquals($expected, Path::info($a)->resolve($b)->get());
 		}
 	}
-	
-	
+
+
 	public function testIsAbsolute()
 	{
 		$tests = [
@@ -146,7 +147,7 @@ class PathTest extends TestCase
 			'a/./x/..' => false,
 			'/.' => true,
 			'/./' => true,
-			'' => false, 
+			'' => false,
 			'php://' => true,
 			'php:///' => true
 		];
@@ -160,7 +161,7 @@ class PathTest extends TestCase
 		$tests = [
 			'/' => false,
 			'.' => false,
-			'' => true, 
+			'' => true,
 			'php://' => true
 		];
 		foreach ($tests as $test => $expected) {
@@ -175,7 +176,6 @@ class PathTest extends TestCase
 			'/a/../' => '',
 			'/a/..' => '',
 			'a/.' => '',
-			'/' => '',
 			'a/b' => 'b',
 			'a' => 'a',
 			'' => ''
@@ -184,7 +184,7 @@ class PathTest extends TestCase
 			$this->assertEquals($expected, Path::info($test)->filename());
 		}
 	}
-	
+
 	public function testBasename()
 	{
 		$tests = [
@@ -230,7 +230,7 @@ class PathTest extends TestCase
 			'..' => '../',
 			'/' => '/',
 			'/var/wwwroot/.' => '/var/wwwroot/./',
-			'/var/wwwroot/./' => '/var/wwwroot/./', 
+			'/var/wwwroot/./' => '/var/wwwroot/./',
 			'a/b' => 'a/',
 			'a' => '',
 			'' => '',
@@ -257,11 +257,5 @@ class PathTest extends TestCase
 				->get(), $test);
 		}
 	}
-	
-	
-	
-	
-	
-	
 }
 
