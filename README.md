@@ -1,5 +1,10 @@
 # PHP Pathinfo
 
+[![build](https://github.com/timostamm/pathinfo/workflows/CI/badge.svg)](https://github.com/timostamm/pathinfo/actions?query=workflow:"CI")
+![Packagist PHP Version](https://img.shields.io/packagist/dependency-v/timostamm/pathinfo/php)
+[![GitHub tag](https://img.shields.io/github/tag/timostamm/pathinfo?include_prereleases=&sort=semver&color=blue)](https://github.com/timostamm/pathinfo/releases/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+
 An object to manipulate filesystem paths with a fluid interface.
 
 
