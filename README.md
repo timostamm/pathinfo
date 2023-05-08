@@ -1,7 +1,5 @@
 # PHP Pathinfo
 
-[![Build Status](https://api.travis-ci.org/timostamm/pathinfo.png)](https://travis-ci.org/timostamm/pathinfo)
-
 An object to manipulate filesystem paths with a fluid interface.
 
 
