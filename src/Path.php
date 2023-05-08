@@ -19,8 +19,8 @@ class Path
 
 	private $firstPart = null;
 
-	public static function info($path)
-	{
+	public static function info($path): Path
+    {
 		if ($path instanceof Path) {
 			return $path;
 		}
@@ -41,15 +41,15 @@ class Path
 	 * @throws \InvalidArgumentException
 	 * @return boolean
 	 */
-	public function isIn($directory, $cwd = null)
-	{
+	public function isIn($directory, $cwd = null): bool
+    {
 		$dir = Path::info($directory);
 		if ($dir->isEmpty()) {
 			throw new \InvalidArgumentException('Directory is empty.');
 		}
 		$dir = $dir->normalize()->assumeDirectory();
 		$self = $this->normalize();
-		
+
 		if (! $dir->isAbsolute() && is_null($cwd)) {
 			throw new \InvalidArgumentException(sprintf('Directory "%s" is not absolute, you have to provide a working directory.', $directory));
 		}
@@ -67,7 +67,7 @@ class Path
 			$dir = $dir->abs($cwd);
 			$self = $self->abs($cwd);
 		}
-		
+
 		if (strpos($self->__toString(), $dir->__toString()) === 0) {
 			return true;
 		}
@@ -91,15 +91,15 @@ class Path
 	 * @throws \InvalidArgumentException
 	 * @return static a new Path object
 	 */
-	public function relativeTo($directory, $cwd = null)
-	{
+	public function relativeTo($directory, $cwd = null): Path
+    {
 		$dir = Path::info($directory);
 		if ($dir->isEmpty()) {
 			throw new \InvalidArgumentException('Directory is empty.');
 		}
 		$dir = $dir->normalize()->assumeDirectory();
 		$self = $this->normalize()->dir();
-		
+
 		if (! $dir->isAbsolute() && is_null($cwd)) {
 			throw new \InvalidArgumentException(sprintf('Directory "%s" is not absolute, you have to provide a working directory.', $directory));
 		}
@@ -117,7 +117,7 @@ class Path
 			$dir = $dir->abs($cwd)->normalize();
 			$self = $self->abs($cwd)->normalize();
 		}
-		
+
 		$i = 0;
 		while ($i < $dir->partCount && $i < $self->partCount && $dir->parts[$i] === $self->parts[$i]) {
 			$i ++;
@@ -144,7 +144,7 @@ class Path
 		$this->set($path);
 	}
 
-	private function setParts(array $parts)
+	private function setParts(array $parts): void
 	{
 		$this->parts = $parts;
 		$this->partCount = count($parts);
@@ -157,8 +157,8 @@ class Path
 		}
 	}
 
-	public function assumeDirectory()
-	{
+	public function assumeDirectory(): Path
+    {
 		if ($this->lastPart !== '') {
 			$this->parts[] = '';
 			$this->setParts($this->parts);
@@ -180,8 +180,8 @@ class Path
 	 *        	The working directory.
 	 * @throws \InvalidArgumentException if the path to the working directory is not absolute.
 	 */
-	public function abs($cwd)
-	{
+	public function abs($cwd): Path
+    {
 		if ($this->isAbsolute()) {
 			return $this;
 		}
@@ -196,11 +196,11 @@ class Path
 	 * Set the path.
 	 *
 	 * @param string $path
-	 * @throws \InvalidArgumentException
 	 * @return self
+	 *@throws \InvalidArgumentException
 	 */
-	public function set($path)
-	{
+	public function set(string $path): Path
+    {
 		if (! is_string($path)) {
 			throw new \InvalidArgumentException();
 		}
@@ -217,18 +217,18 @@ class Path
 	 *
 	 * @return string
 	 */
-	public function get()
-	{
+	public function get(): string
+    {
 		return join('/', $this->parts);
 	}
 
 	/**
-	 * Is the this path empty?
+	 * Is this path empty?
 	 *
 	 * @return boolean
 	 */
-	public function isEmpty()
-	{
+	public function isEmpty(): bool
+    {
 		if ($this->partCount === 0) {
 			return true;
 		}
@@ -246,22 +246,22 @@ class Path
 	 *
 	 * @return boolean
 	 */
-	public function isAbsolute()
-	{
+	public function isAbsolute(): bool
+    {
 		if ($this->firstPart === '') {
 			return true;
 		}
 		return $this->isStreamWrapped();
 	}
-	
+
 	/**
 	 * Is this a stream-wrapped path?
-	 * 
+	 *
 	 * @see http://php.net/manual/de/class.streamwrapper.php
 	 * @return boolean
 	 */
-	public function isStreamWrapped()
-	{
+	public function isStreamWrapped(): bool
+    {
 		$maybeStreamWrapped = $this->partCount > 1 && $this->firstPart !== '' && $this->parts[1] === '' && ':' === substr($this->firstPart, -1);
 		if (! $maybeStreamWrapped) {
 			return false;
@@ -269,15 +269,15 @@ class Path
 		$name = substr($this->firstPart, 0, -1);
 		return in_array($name, stream_get_wrappers());
 	}
-	
+
 	/**
 	 * Returns true if both parts are equal after normalization.
 	 *
 	 * @param string|Path $path
 	 * @return boolean
 	 */
-	public function equals($path)
-	{
+	public function equals($path): bool
+    {
 		$p = Path::info($path);
 		return $p->normalize()->get() === $this->normalize()->get();
 	}
@@ -287,8 +287,8 @@ class Path
 	 *
 	 * @return static a new Path object
 	 */
-	public function dir()
-	{
+	public function dir(): Path
+    {
 		$dir = clone $this;
 		if ($this->lastPart === '') {
 			// already dir
@@ -309,8 +309,8 @@ class Path
 	 *
 	 * @return static a new Path object
 	 */
-	public function parent()
-	{
+	public function parent(): Path
+    {
 		return $this->dir()->resolve('../');
 	}
 
@@ -324,8 +324,8 @@ class Path
 	 *
 	 * @return string
 	 */
-	public function dirname()
-	{
+	public function dirname(): string
+    {
 		return $this->dir()->get();
 	}
 
@@ -335,8 +335,8 @@ class Path
 	 *
 	 * @return string
 	 */
-	public function filename()
-	{
+	public function filename(): ?string
+    {
 		if ($this->lastPart === '' || $this->lastPart === '..' || $this->lastPart === '.') {
 			return '';
 		}
@@ -348,8 +348,8 @@ class Path
 	 *
 	 * @return string
 	 */
-	public function basename()
-	{
+	public function basename(): string
+    {
 		$f = $this->filename();
 		return pathinfo($f, PATHINFO_FILENAME);
 	}
@@ -359,8 +359,8 @@ class Path
 	 *
 	 * @return string
 	 */
-	public function extension()
-	{
+	public function extension(): string
+    {
 		$f = $this->filename();
 		return pathinfo($f, PATHINFO_EXTENSION);
 	}
@@ -378,8 +378,8 @@ class Path
 	 * @param string|Path $path
 	 * @return static a new Path object
 	 */
-	public function resolve($path)
-	{
+	public function resolve($path): Path
+    {
 		if ($path instanceof Path) {
 			$add = clone $path;
 		} else if (is_string($path)) {
@@ -387,9 +387,9 @@ class Path
 		} else {
 			throw new \InvalidArgumentException();
 		}
-		
+
 		$base = clone $this;
-		
+
 		if ($base->partCount === 0) {
 			return $add;
 		}
@@ -420,8 +420,8 @@ class Path
 	 *
 	 * @return static a new Path object
 	 */
-	public function normalize()
-	{
+	public function normalize(): Path
+    {
 		$path = clone $this;
 		$path->parts = [];
 		foreach ($this->parts as $part) {
