@@ -350,7 +350,7 @@ class Path
 	 */
 	public function basename(): string
     {
-		$f = $this->filename();
+        $f = $this->filename() ?? '';
 		return pathinfo($f, PATHINFO_FILENAME);
 	}
 
@@ -361,7 +361,7 @@ class Path
 	 */
 	public function extension(): string
     {
-		$f = $this->filename();
+        $f = $this->filename() ?? '';
 		return pathinfo($f, PATHINFO_EXTENSION);
 	}
 

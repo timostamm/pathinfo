@@ -194,7 +194,8 @@ class PathTest extends TestCase
 			'/' => '',
 			'a/b.e' => 'b',
 			'a/b.e/..' => '',
-			'a.e' => 'a'
+			'a.e' => 'a',
+            '' => '',
 		];
 		foreach ($tests as $test => $expected) {
 			$this->assertEquals($expected, Path::info($test)->basename());
@@ -210,7 +211,8 @@ class PathTest extends TestCase
 			'/' => '',
 			'a/b.php.inc' => 'inc',
 			'a/b.php.inc/..' => '',
-			'a.php.inc' => 'inc'
+			'a.php.inc' => 'inc',
+            '' => '',
 		];
 		foreach ($tests as $test => $expected) {
 			$this->assertEquals($expected, Path::info($test)->extension());
