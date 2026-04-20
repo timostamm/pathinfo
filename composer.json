@@ -2,7 +2,7 @@
 	"name" : "timostamm/pathinfo",
 	"description" : "An object to manipulate filesystem paths with a fluid interface",
 	"type" : "library",
-	"license" : "AGPL-3.0",
+	"license" : "MIT",
 	"keywords" : [
 		"pathinfo", "path", "filesystem", "relative path", "absolute path"
 	],
